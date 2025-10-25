@@ -70,7 +70,7 @@ spec:
       volumes:
         - name: arranger-configs
           configMap:
-            name: arranger-config
+            name: {{ .Values.fullnameOverride | default (printf "%s-arranger" .Release.Name) }}-config
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

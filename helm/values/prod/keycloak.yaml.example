@@ -19,7 +19,7 @@ keycloak:
   # Admin user
   admin:
     username:
-    password:
+    password:  # < < < < < < < < < < < SECRET NEEDED
 
 extraEnv:
   - name: KC_FEATURES

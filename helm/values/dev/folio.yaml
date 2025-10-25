@@ -1,0 +1,8 @@
+
+ingress:
+  className: nginx
+  hosts:
+    - host: folio.local
+      paths:
+        - path: /
+          pathType: Prefix

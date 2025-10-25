@@ -1,0 +1,11 @@
+
+url:
+  hostname: "maestro.local"
+
+ingress:
+  className: "nginx"
+  hosts:
+    - host: maestro.local
+      paths:
+        - path: /
+          pathType: Prefix

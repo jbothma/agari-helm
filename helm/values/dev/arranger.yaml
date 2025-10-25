@@ -1,0 +1,16 @@
+
+url:
+  hostname: "arranger.local"
+
+arranger:
+  stage:
+    baseUrl: "http://arranger.local"
+    adminRoot: "http://arranger-server:5050/graphql"
+
+ingress:
+  className: "nginx"
+  hosts:
+    - host: arranger.local
+      paths:
+        - path: /
+          pathType: Prefix

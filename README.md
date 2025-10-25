@@ -110,15 +110,12 @@ curl -X PUT "http://elasticsearch.local/agari-index" \
 
 #### 5.4 MAESTRO
 ```bash
-helm install maestro ./helm/maestro -n agari
+helm install maestro ./helm/maestro -n agari -f helm/values/dev/maestro.yaml
 ```
 #### 5.5 ARRANGER
 ```bash
-# Set up Arranger configuration
-kubectl create configmap arranger-config --from-file=helm/arranger/configs/ -n agari
-
 # Arranger
-helm install arranger ./helm/arranger -n agari
+helm install arranger ./helm/arranger -n agari -f helm/values/dev/arranger.yaml
 ```
 
 #### 5.6 FOLIO Projects Service
@@ -130,8 +127,7 @@ helm install arranger ./helm/arranger -n agari
 helm install folio-db ./helm/folio-db -n agari
 
 # Folio
-helm install folio ./helm/folio -n agari
-
+helm install folio ./helm/folio -n agari -f helm/values/dev/folio.yaml
 ```
 
 

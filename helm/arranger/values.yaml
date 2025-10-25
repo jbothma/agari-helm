@@ -60,35 +60,6 @@ probes:
     periodSeconds: 10
     timeoutSeconds: 5
     failureThreshold: 3
-  elasticsearch:
-    host: "http://elasticsearch:9200"
-    user: "elastic"  
-    password: "myelasticpassword"
-  
-  stage:
-    baseUrl: "http://arranger-ilifu.openup.org.za:3000"
-    adminRoot: "http://arranger-server:5050/graphql"
-
-resources:
-  limits:
-    cpu: 200m
-    memory: 1Gi
-    ephemeral-storage: 2Gi
-  requests:
-    cpu: 100m
-    memory: 256Mi
-    ephemeral-storage: 1Gi
-
-ingress:
-  enabled: true
-  className: "private"
-  annotations:
-    nginx.ingress.kubernetes.io/proxy-body-size: "50m"
-  hosts:
-    - host: arranger-ilifu.openup.org.za
-      paths:
-        - path: /
-          pathType: Prefix
 
 nodeSelector: {}
 tolerations: []
