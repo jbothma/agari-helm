@@ -16,12 +16,12 @@ Complete Overture stack deployment on Kubernetes with authentication, file manag
 In non-dev environments, you can copy the local values template to a new file that allows you to add secrets, e.g.
 
 ```bash
-cp helm/values/prod/keycloak.yaml.template helm/values/prod/keycloak.yaml
+cp helm/values/prod/keycloak.yaml.example helm/values/prod/keycloak.yaml
 ```
 
-helm/values is .gitignore'd to prevent adding secrets to git. `git add -f` to add changes.
+./helm/values is .gitignore'd to prevent adding secrets to git. `git add -f` to add changes.
 
-Remember: you check that your local copy is up to date with any changes to the template before upgrading.
+Remember: Check that your local copy is up to date with any changes to the example for that environment before upgrading.
 
 Remember: In config overlays added with -f, arrays must be replaced in full. You can't override a single element.
 
@@ -30,6 +30,7 @@ Remember: In config overlays added with -f, arrays must be replaced in full. You
 In dev you might want to use **k3d** for quick setup:
 
 ```bash
+
 k3d cluster create agari --agents 2 --port "80:80@loadbalancer"
 
 # Install nginx ingress
@@ -51,10 +52,7 @@ kubectl create namespace agari
 
 
 ```bash
-helm install minio ./helm/minio -n agari -f ./helm/dev/minio.yml
-
-# Minio might require prot-forwarding:
-kubectl port-forward -n agari service/minio 9000:9000
+helm install minio ./helm/minio -n agari -f ./helm/values/dev/minio.yaml
 ```
 
 ### 3.2 Kafka Message Queue
@@ -91,7 +89,7 @@ use `utils/update-secrets.sh` script to update the secrets in all services
 helm install song-db ./helm/song-db -n agari
 
 # Song
-helm install song ./helm/song -n agari -f ./helm/dev/song.yml
+helm install song ./helm/song -n agari -f ./helm/values/dev/song.yaml
 ```
 
 #### 5.2 SCORE
