@@ -19,7 +19,7 @@ jobs:
           cluster-name: "agari"
           args: >-
             -p "80:80@loadbalancer"
-            --image docker.io/rancher/k3s:v1.34.1+k3s1
+            --image docker.io/rancher/k3s:v1.34.1-k3s1
             --k3s-arg "--no-deploy=traefik,metrics-server@server:*"
 
 
