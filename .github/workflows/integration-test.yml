@@ -13,15 +13,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - uses: AbsaOSS/k3d-action@v2
-        name: "Create Single Cluster"
-        with:
-          cluster-name: "agari"
-          args: >-
-            -p "80:80@loadbalancer"
-            --image docker.io/rancher/k3s:v1.34.1-k3s1
-            --k3s-arg "--no-deploy=traefik,metrics-server@server:*"
+      - run: "wget -q -O - https://raw.githubusercontent.com/k3d-io/k3d/main/install.sh | TAG=v5.8.3 bash"
 
+      - run: k3d cluster create agari --servers 1 --agents 1 --k3s-arg "--disable=traefik@server:0" --port "80:80@loadbalancer" --api-port 0.0.0.0:6550 --wait
 
       - name: Wait for K3s to be ready
         run: |
