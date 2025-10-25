@@ -17,14 +17,16 @@ jobs:
         uses: debianmaster/actions-k3s@master
         id: k3s
         with:
-          version: 'latest'
-          args: |
-            --disable traefik
+          version: 'v1.21.2-k3s1'
 
       - name: Wait for K3s to be ready
         run: |
           kubectl wait --for=condition=Ready nodes --all --timeout=300s
           kubectl get nodes
+
+      - run: helm uninstall traefik traefik-crd -n kube-system
+      - run: k3d cluster edit agari --port-add 80:80@loadbalancer
+      - run: kubectl create namespace agari
 
       - name: Install nginx ingress controller
         run: |
@@ -46,12 +48,12 @@ jobs:
 
       - name: Verify keycloak-db deployment
         run: |
-          kubectl get pods -l app.kubernetes.io/name=keycloak-db
-          kubectl wait --for=condition=Ready pod -l app.kubernetes.io/name=keycloak-db --timeout=300s
+          kubectl get pods -l app.kubernetes.io/service=keycloak-db --namespace=agari
+          kubectl wait --for=condition=Ready pod -l app.kubernetes.io/instance=keycloak-db --timeout=300s --namespace=agari
 
       - name: Deploy keycloak
         run: |
-          echo "Deploying keycloak with dev environment overlay..."
+          echo "Deploying keycloak..."
           helm install keycloak ./helm/keycloak \
             -f ./helm/values/dev/keycloak.yaml \
             --wait \
@@ -59,8 +61,8 @@ jobs:
 
       - name: Verify keycloak deployment
         run: |
-          kubectl get pods -l app.kubernetes.io/name=keycloak
-          kubectl wait --for=condition=Ready pod -l app.kubernetes.io/name=keycloak --timeout=600s
+          kubectl get pods -l app.kubernetes.io/name=keycloak --namespace=agari
+          kubectl wait --for=condition=Ready pod -l app.kubernetes.io/instance=keycloak --timeout=600s --namespace=agari
 
       - name: Test keycloak health endpoint via ingress
         run: |
@@ -78,7 +80,7 @@ jobs:
           echo "=== Keycloak DB Logs ==="
           kubectl logs -l app.kubernetes.io/name=keycloak-db --tail=100 || true
           echo "=== Keycloak Logs ==="
-          kubectl logs -l app.kubernetes.io/name=keycloak --tail=100 || true
+          kubectl logs -l app.kubernetes.io/name=keycloak --namespace=agari --tail=100 || true
           echo "=== All Pods ==="
           kubectl get pods -A
           echo "=== Ingress Status ==="

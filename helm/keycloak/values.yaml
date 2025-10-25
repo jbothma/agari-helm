@@ -76,7 +76,7 @@ keycloak:
   # Keycloak settings
   hostname: keycloak-ilifu.openup.org.za
   healthEnabled: true
-  startupMode: start-dev
+  args: ["start-dev"]
   frontendUrl: "https://keycloak-ilifu.openup.org.za"
   adminUrl: "https://keycloak-ilifu.openup.org.za"
 

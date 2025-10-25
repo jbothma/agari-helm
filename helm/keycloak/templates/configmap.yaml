@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.fullnameOverride | default (printf "%s-keycloak" .Release.Name) }}-realm
+  labels:
+    app.kubernetes.io/name: {{ .Values.nameOverride | default "keycloak" }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+data:
+  agari-realm-rbac.json: |
+{{ .Files.Get "configs/agari-realm-rbac.json" | indent 4 }}

@@ -34,6 +34,8 @@ spec:
             {{- toYaml . | nindent 12 }}
           {{- end }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          command: ["/opt/keycloak/bin/kc.sh"]
+          args: {{ .Values.keycloak.args | toJson}}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
@@ -53,9 +55,9 @@ spec:
             - name: KC_DB_URL
               value: "jdbc:postgresql://{{ .Values.keycloak.database.host }}:{{ .Values.keycloak.database.port }}/{{ .Values.keycloak.database.database }}"
             # Admin user
-            - name: KEYCLOAK_ADMIN
+            - name: KC_BOOTSTRAP_ADMIN_USERNAME
               value: {{ .Values.keycloak.admin.username }}
-            - name: KEYCLOAK_ADMIN_PASSWORD
+            - name: KC_BOOTSTRAP_ADMIN_PASSWORD
               value: {{ .Values.keycloak.admin.password }}
             # Keycloak settings
             #- name: KC_HOSTNAME
@@ -75,9 +77,10 @@ spec:
               value: {{ .value | quote }}
             {{- end }}
             {{- end }}
-          args:
-            - {{ .Values.keycloak.startupMode }}
           volumeMounts:
+            - name: realm-config
+              mountPath: /opt/keycloak/data/import
+              readOnly: true
           {{- if .Values.probes.liveness.enabled }}
           livenessProbe:
             {{- if .Values.probes.liveness.httpGet }}
@@ -122,3 +125,7 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+      volumes:
+        - name: realm-config
+          configMap:
+            name: {{ .Values.fullnameOverride | default (printf "%s-keycloak" .Release.Name) }}-realm

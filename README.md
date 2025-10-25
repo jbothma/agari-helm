@@ -72,7 +72,7 @@ helm install kafka bitnami/kafka -f helm/kafka/values-bitnami.yaml -n agari
 helm install keycloak-db ./helm/keycloak-db -n agari
 
 # Keycloak
-helm install keycloak ./helm/keycloak -n agari -f ./helm/dev/keycloak.yml
+helm install keycloak ./helm/keycloak -n agari -f ./helm/values/dev/keycloak.yaml
 ```
 
 Set up the **client** in Keycloak and copy the **secret** to **song**, **score**, **maestro** and **folio** `values.yaml`
