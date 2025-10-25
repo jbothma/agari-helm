@@ -13,11 +13,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup K3s cluster with 2 nodes
-        uses: debianmaster/actions-k3s@master
-        id: k3s
+     
+      - name: Start a local k8s cluster
+        uses: jupyterhub/action-k3s-helm@v4
         with:
-          version: 'v1.21.2-k3s1'
+          k3s-version: v1.29.0+k3s1
 
       - name: Wait for K3s to be ready
         run: |
