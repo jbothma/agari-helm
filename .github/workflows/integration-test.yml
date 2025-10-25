@@ -45,7 +45,7 @@ jobs:
       - name: Verify keycloak-db deployment
         run: |
           kubectl get pods -l app.kubernetes.io/service=keycloak-db --namespace=agari
-          kubectl wait --for=condition=Ready pod -l app.kubernetes.io/instance=keycloak-db --timeout=300s --namespace=agari
+          kubectl wait --for=condition=Ready pod -l app.kubernetes.io/service=keycloak-db --timeout=300s --namespace=agari
 
       - name: Deploy keycloak
         run: |
