@@ -1,0 +1,87 @@
+name: Integration Test
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  integration-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup K3s cluster with 2 nodes
+        uses: debianmaster/actions-k3s@master
+        id: k3s
+        with:
+          version: 'latest'
+          args: |
+            --disable traefik
+
+      - name: Wait for K3s to be ready
+        run: |
+          kubectl wait --for=condition=Ready nodes --all --timeout=300s
+          kubectl get nodes
+
+      - name: Install nginx ingress controller
+        run: |
+          kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.8.1/deploy/static/provider/cloud/deploy.yaml
+          kubectl wait --namespace ingress-nginx --for=condition=ready pod --selector=app.kubernetes.io/component=controller --timeout=300s
+
+      - name: Configure /etc/hosts for hostname-based routing
+        run: |
+          echo "127.0.0.1 keycloak.local" | sudo tee -a /etc/hosts
+          cat /etc/hosts
+
+      - name: Deploy keycloak-db
+        run: |
+          echo "Deploying keycloak-db with dev environment overlay..."
+          helm install keycloak-db ./helm/keycloak-db \
+            -f ./helm/values/dev/keycloak.yaml \
+            --wait \
+            --timeout 5m
+
+      - name: Verify keycloak-db deployment
+        run: |
+          kubectl get pods -l app.kubernetes.io/name=keycloak-db
+          kubectl wait --for=condition=Ready pod -l app.kubernetes.io/name=keycloak-db --timeout=300s
+
+      - name: Deploy keycloak
+        run: |
+          echo "Deploying keycloak with dev environment overlay..."
+          helm install keycloak ./helm/keycloak \
+            -f ./helm/values/dev/keycloak.yaml \
+            --wait \
+            --timeout 10m
+
+      - name: Verify keycloak deployment
+        run: |
+          kubectl get pods -l app.kubernetes.io/name=keycloak
+          kubectl wait --for=condition=Ready pod -l app.kubernetes.io/name=keycloak --timeout=600s
+
+      - name: Test keycloak health endpoint via ingress
+        run: |
+          echo "Waiting for ingress to be ready..."
+          sleep 30
+
+          echo "Testing Keycloak health endpoint via hostname..."
+          curl -f http://keycloak.local/health/ready || exit 1
+
+          echo "Keycloak is ready and accessible via ingress!"
+
+      - name: Show pod logs on failure
+        if: failure()
+        run: |
+          echo "=== Keycloak DB Logs ==="
+          kubectl logs -l app.kubernetes.io/name=keycloak-db --tail=100 || true
+          echo "=== Keycloak Logs ==="
+          kubectl logs -l app.kubernetes.io/name=keycloak --tail=100 || true
+          echo "=== All Pods ==="
+          kubectl get pods -A
+          echo "=== Ingress Status ==="
+          kubectl get ingress -A
+          echo "=== Events ==="
+          kubectl get events --sort-by='.lastTimestamp'

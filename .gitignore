@@ -2,7 +2,7 @@
 values-production-secrets.yaml
 
 work/
-.github/
+.git
 
 # IDE files
 .vscode/
