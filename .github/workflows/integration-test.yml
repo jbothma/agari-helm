@@ -18,14 +18,13 @@ jobs:
         uses: jupyterhub/action-k3s-helm@v4
         with:
           k3s-version: v1.29.0+k3s1
+          extra-setup-args: --port "80:80@loadbalancer" --disable-traefik
 
       - name: Wait for K3s to be ready
         run: |
           kubectl wait --for=condition=Ready nodes --all --timeout=300s
           kubectl get nodes
 
-      - run: helm uninstall traefik traefik-crd -n kube-system
-      - run: k3d cluster edit agari --port-add 80:80@loadbalancer
       - run: kubectl create namespace agari
 
       - name: Install nginx ingress controller
