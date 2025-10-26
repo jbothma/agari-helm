@@ -13,6 +13,13 @@ song:
       resourceserver:
         jwt:
           issuerUri: "http://keycloak.local/realms/agari"
+    server:
+      clientSecret: "VDyLEjGR3xDQvoQlrHq5AB6OwbW0Refc"
+  score:
+    clientCredentials:
+      id: "dms"
+      secret: "VDyLEjGR3xDQvoQlrHq5AB6OwbW0Refc"
+      tokenUrl: "http://keycloak:8080/realms/agari/protocol/openid-connect/token"
 
 ingress:
   className: "nginx"

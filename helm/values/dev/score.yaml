@@ -1,0 +1,34 @@
+
+
+url:
+  hostname: "score.local"
+
+ingress:
+  enabled: true
+  className: "nginx"
+  hosts:
+    - host: score-ilifu.openup.org.za
+      paths:
+        - path: /
+          pathType: Prefix
+
+score:
+  # Client credentials for Score to authenticate to SONG
+  clientCredentials:
+    id: "dms"
+    secret: "VDyLEjGR3xDQvoQlrHq5AB6OwbW0Refc"
+
+  s3:
+    endpoint: "http://minio.local:9000"
+    accesskey: "admin"
+    secretkey: "admin123"
+
+
+  auth:
+    server:
+      clientSecret: "VDyLEjGR3xDQvoQlrHq5AB6OwbW0Refc"
+    oauth2:
+      resourceserver:
+        jwt:
+          jwkSetUri: "http://keycloak.local/realms/agari/protocol/openid-connect/certs"
+          issuerUri: "http://keycloak.local/realms/agari"

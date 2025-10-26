@@ -9,3 +9,17 @@ ingress:
       paths:
         - path: /
           pathType: Prefix
+
+maestro:
+  repositories:
+    - code: "song.overture"
+      url: "http://song:8080"
+      name: "Overture"
+      organization: "Overture"
+      country: "CA"
+      auth:
+        type: "oauth2"
+        clientId: "dms"
+        clientSecret: "VDyLEjGR3xDQvoQlrHq5AB6OwbW0Refc"
+        tokenUrl: "http://keycloak:8080/realms/agari/protocol/openid-connect/token"
+        scope: "song.READ"

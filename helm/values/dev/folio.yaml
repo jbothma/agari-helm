@@ -6,3 +6,8 @@ ingress:
       paths:
         - path: /
           pathType: Prefix
+
+folio:
+  auth:
+    keycloak:
+      clientSecret: VDyLEjGR3xDQvoQlrHq5AB6OwbW0Refc

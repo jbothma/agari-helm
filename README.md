@@ -99,7 +99,7 @@ helm install song ./helm/song -n agari -f ./helm/values/dev/song.yaml
 
 #### 5.2 SCORE
 ```bash
-helm install score ./helm/score -n agari
+helm install score ./helm/score -n agari -f ./helm/values/dev/score.yaml
 ```
 
 #### 5.3 ELASTICSEARCH
