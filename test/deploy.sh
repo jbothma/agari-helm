@@ -23,13 +23,15 @@ kubectl wait --for=condition=Ready pod -l app.kubernetes.io/instance=minio --tim
 
 # Deploy Kafka
 echo ""
-echo "Adding bitnami helm repo..."
-helm repo add bitnami https://charts.bitnami.com/bitnami 2>/dev/null || true
+echo "Adding Strimzi helm repo..."
+helm repo add strimzi https://strimzi.io/charts/ 2>/dev/null || true
 helm repo update
 
-echo "Deploying Kafka..."
-helm install kafka bitnami/kafka \
-  -f helm/kafka/values-bitnami.yaml \
+echo "Building Kafka chart dependencies..."
+cd helm/kafka && helm dependency build && cd ../..
+
+echo "Deploying Kafka with Strimzi operator..."
+helm install kafka ./helm/kafka \
   -n "${NAMESPACE}" \
   --wait \
   --timeout "${TIMEOUT_SERVICE}"
