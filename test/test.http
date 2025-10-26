@@ -1,0 +1,77 @@
+# AGARI Integration Test Suite
+
+# Service endpoints
+@keycloak = http://keycloak.local
+@folio = http://folio.local
+
+# Authentication config
+@realm = agari
+@client_id = dms
+@client_secret = VDyLEjGR3xDQvoQlrHq5AB6OwbW0Refc
+@username = system.admin@agari.tech
+@password = pass123
+
+### 1. LOGIN to get access token
+# @name login
+POST {{keycloak}}/realms/{{realm}}/protocol/openid-connect/token
+Content-Type: application/x-www-form-urlencoded
+
+username={{username}}
+&password={{password}}
+&grant_type=password
+&client_id={{client_id}}
+&client_secret={{client_secret}}
+
+###
+@token = {{login.access_token}}
+
+### 2. Create pathogen
+# @name create_pathogen
+POST {{folio}}/pathogens
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Test Cholera",
+  "description": "Test Cholera Virus",
+  "scientific_name": "Vibrio cholerae"
+}
+
+###
+@pathogen_id = {{create_pathogen.pathogen.id}}
+
+### 3. Create project
+# @name create_project
+POST {{folio}}/projects
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Test Cholera Project",
+  "description": "Test project for cholera research",
+  "pathogen_id": "{{pathogen_id}}",
+  "privacy": "public"
+}
+
+###
+@project_id = {{create_project.project.id}}
+
+### 4. Create study
+# @name create_study
+POST {{folio}}/studies/
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "studyId": "test-study-001",
+  "name": "AGARI Test Study",
+  "description": "Test study for genomic data workflow",
+  "projectId": "{{project_id}}",
+  "info": {
+    "projectType": "genomics",
+    "region": "South Africa"
+  }
+}
+
+###
+@study_id = {{create_study.study.id}}
