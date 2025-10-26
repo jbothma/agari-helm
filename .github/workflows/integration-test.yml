@@ -39,6 +39,7 @@ jobs:
           echo "Deploying keycloak-db with dev environment overlay..."
           helm install keycloak-db ./helm/keycloak-db \
             -f ./helm/values/dev/keycloak.yaml \
+            -n agari \
             --wait \
             --timeout 5m
 
@@ -52,6 +53,7 @@ jobs:
           echo "Deploying keycloak..."
           helm install keycloak ./helm/keycloak \
             -f ./helm/values/dev/keycloak.yaml \
+            -n agari \
             --wait \
             --timeout 10m
 
