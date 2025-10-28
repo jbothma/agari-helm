@@ -135,6 +135,20 @@ utils/helm_env.sh install agari folio dev
 ```
 
 
+## Upgrades
+
+If you install [helm-diff](https://github.com/databus23/helm-diff?tab=readme-ov-file#using-helm-plugin-manager--23x), you can preview changes that would be made in an upgrade with
+
+```
+utils/helm_env.sh diff agari folio dev
+```
+
+You can then apply those changes with
+
+```
+utils/helm_env.sh upgrade agari folio dev
+```
+
 
 ## Ingress Configuration
 
