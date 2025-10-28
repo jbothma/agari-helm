@@ -52,7 +52,7 @@ kubectl create namespace agari
 
 
 ```bash
-helm install minio ./helm/minio -n agari -f ./helm/values/dev/minio.yaml
+utils/helm_env.sh install agari minio dev
 ```
 
 ### 3.2 Kafka Message Queue
@@ -72,10 +72,10 @@ helm install kafka ./helm/kafka -n agari
 
 ```bash
 # Database
-helm install keycloak-db ./helm/keycloak-db -n agari
+utils/helm_env.sh install agari keycloak-db dev
 
 # Keycloak
-helm install keycloak ./helm/keycloak -n agari -f ./helm/values/dev/keycloak.yaml
+utils/helm_env.sh install agari keycloak dev
 ```
 
 Set up the **client** in Keycloak and copy the **secret** to **song**, **score**, **maestro** and **folio** `values.yaml`
@@ -91,21 +91,21 @@ use `utils/update-secrets.sh` script to update the secrets in all services
 
 ```bash
 # Database
-helm install song-db ./helm/song-db -n agari
+utils/helm_env.sh install agari song-db dev
 
 # Song
-helm install song ./helm/song -n agari -f ./helm/values/dev/song.yaml
+utils/helm_env.sh install agari song dev
 ```
 
 #### 5.2 SCORE
 ```bash
-helm install score ./helm/score -n agari -f ./helm/values/dev/score.yaml
+utils/helm_env.sh install agari score dev
 ```
 
 #### 5.3 ELASTICSEARCH
 ```bash
 # Elasticsearch
-helm install elasticsearch ./helm/elasticsearch -n agari
+utils/helm_env.sh install agari elasticsearch dev
 
 # Create agari-index with proper mapping
 curl -X PUT "http://elasticsearch.local/agari-index" \
@@ -115,12 +115,11 @@ curl -X PUT "http://elasticsearch.local/agari-index" \
 
 #### 5.4 MAESTRO
 ```bash
-helm install maestro ./helm/maestro -n agari -f helm/values/dev/maestro.yaml
+utils/helm_env.sh install agari maestro dev
 ```
 #### 5.5 ARRANGER
 ```bash
-# Arranger
-helm install arranger ./helm/arranger -n agari -f helm/values/dev/arranger.yaml
+utils/helm_env.sh install agari arranger dev
 ```
 
 #### 5.6 FOLIO Projects Service
@@ -129,10 +128,10 @@ helm install arranger ./helm/arranger -n agari -f helm/values/dev/arranger.yaml
 
 ```bash
 # Database
-helm install folio-db ./helm/folio-db -n agari
+utils/helm_env.sh install agari folio-db dev
 
 # Folio
-helm install folio ./helm/folio -n agari -f helm/values/dev/folio.yaml
+utils/helm_env.sh install agari folio dev
 ```
 
 
