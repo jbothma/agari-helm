@@ -33,10 +33,12 @@ extraEnv:
   - name: JAVA_OPTS_APPEND
     value: "-Djava.awt.headless=true -Djboss.modules.system.pkgs=org.jboss.byteman -Djava.net.preferIPv4Stack=true -server -Xms512m -Xmx768m"
   - name: KC_HOSTNAME
-    value: keycloak.local
+    value: http://keycloak.local
   - name: KC_PROXY
     value: "edge"
   - name: KC_CORS_ORIGINS
     value: "*"
   - name: KC_SPI_EMAIL_TEMPLATE_PROVIDER
     value: freemarker
+#  - name: KC_LOG_LEVEL_ORG_KEYCLOAK
+#    value: DEBUG
