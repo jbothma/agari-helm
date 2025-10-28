@@ -49,7 +49,7 @@ jobs:
         run: ./test/deploy_test_env.sh
 
       - name: Run integration tests
-        run: httpyac test/test.http --all --verbose
+        run: httpyac test/test.http --all
 
       - name: Show pod logs on failure
         if: failure()
