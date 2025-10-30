@@ -7,7 +7,7 @@ ingress:
   enabled: true
   className: "nginx"
   hosts:
-    - host: score-ilifu.openup.org.za
+    - host: score.local
       paths:
         - path: /
           pathType: Prefix
@@ -19,9 +19,12 @@ score:
     secret: "VDyLEjGR3xDQvoQlrHq5AB6OwbW0Refc"
 
   s3:
-    endpoint: "http://minio.local:9000"
+    endpoint: "http://minio:9000"
     accesskey: "admin"
     secretkey: "admin123"
+    presignedUrl:
+      override:
+        host: "http://minio.local"
 
 
   auth:
@@ -30,5 +33,5 @@ score:
     oauth2:
       resourceserver:
         jwt:
-          jwkSetUri: "http://keycloak.local/realms/agari/protocol/openid-connect/certs"
+          jwkSetUri: "http://keycloak:8080/realms/agari/protocol/openid-connect/certs"
           issuerUri: "http://keycloak.local/realms/agari"

@@ -63,6 +63,8 @@ spec:
               value: {{ .Values.score.s3.sigv4enabled | quote }}
             - name: S3_SECURED
               value: {{ .Values.score.s3.secured | quote }}
+            - name: S3_PRESIGNEDURL_OVERRIDE_HOST
+              value: {{ .Values.score.s3.presignedUrl.override.host | quote }}
             - name: OBJECT_SENTINEL
               value: {{ .Values.score.object.sentinel | quote }}
             - name: BUCKET_NAME_OBJECT

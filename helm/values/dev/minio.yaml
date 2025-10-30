@@ -14,3 +14,5 @@ ingress:
       paths:
         - path: /
           pathType: Prefix
+  annotations:
+    nginx.ingress.kubernetes.io/upstream-vhost: minio:9000

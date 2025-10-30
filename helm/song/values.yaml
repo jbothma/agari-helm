@@ -27,7 +27,7 @@ song:
         resourceserver:
           jwt:
             jwkSetUri: "http://keycloak:8080/realms/agari/protocol/openid-connect/certs"
-            issuerUri: "http://keycloak-ilifu.openup.org.za/realms/agari"
+            issuerUri: "http://keycloak.local/realms/agari"
 
   client:
     study:
